@@ -38,9 +38,13 @@ export const PUT = async (req:Request, res: NextResponse) => {
 
 export const DELETE = async (req:Request, res: NextResponse) => {
     try {
-       
-       
-    } catch (error) {
-        return NextResponse.json({message: "Error!", error}, { status: 500});
-    }
+        const id = req.url.split("/blog/")[1];
+        await main();
+        const post = await prisma.post.delete({ where: { id } });
+        return NextResponse.json({message: "Success!", post }, { status: 200 });
+     } catch (error) {
+         return NextResponse.json({message: "Error!", error}, { status: 500 });
+     } finally {
+         await prisma.$disconnect();
+     }
 }
